@@ -1,1 +1,1 @@
-  # Gitea-DevOps-Infrastructure
+# Gitea-DevOps-Infrastructure
