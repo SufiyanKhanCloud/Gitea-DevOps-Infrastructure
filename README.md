@@ -14,7 +14,7 @@ This repository is organized into five core modules. Click the links below for d
 1. [**Core Setup**](./01-Core-Setup/database-integration.md): MSSQL integration and Gitea service configuration.
 2. [**IIS Reverse Proxy**](./02-IIS-Reverse-Proxy/iis-optimization.md): Handling 512MB large file payloads and SSL passthrough.
 3. [**CI/CD Runner**](./03-CI-CD-Runner/actions-runner-setup.md): Host-mode Gitea Actions for local Windows automation.
-4. [**Automated Backups**](./04-Automated-Backups/backup-logic.md): SQL dumping and automated FTP vaulting strategy.
+4. [**Automated Backups**](./04-Automated-Backups/backup-strategy.md): SQL dumping and automated FTP vaulting strategy.
 5. [**Project Documentation**](./05-Documentation/server-specs.md): Full server lifecycle and maintenance logs.
 
 ## Key Accomplishments
