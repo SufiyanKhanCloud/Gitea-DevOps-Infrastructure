@@ -15,7 +15,7 @@ This repository is organized into five core modules. Click the links below for d
 2. [**IIS Reverse Proxy**](./02-IIS-Reverse-Proxy/iis-optimization.md): Handling 512MB large file payloads and SSL passthrough.
 3. [**CI/CD Runner**](./03-CI-CD-Runner/actions-runner-setup.md): Host-mode Gitea Actions for local Windows automation.
 4. [**Automated Backups**](./04-Automated-Backups/backup-strategy.md): SQL dumping and automated FTP vaulting strategy.
-5. [**Project Documentation**](./05-Documentation/server-specs.md): Full server lifecycle and maintenance logs.
+5. [**Project Documentation**](./05-Documentation/README.md): Full server lifecycle and maintenance logs.
 
 ## Key Accomplishments
 * **Enterprise Migration:** Successfully migrated 5+ high-sensitivity banking repositories (Meezan, Soneri, etc.) from GitHub to private Gitea organizations.
