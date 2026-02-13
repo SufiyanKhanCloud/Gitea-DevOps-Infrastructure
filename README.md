@@ -1,20 +1,23 @@
-# Gitea-DevOps-Infrastructure
-> 
-> 
-> A production-grade, self-hosted Git infrastructure designed for secure banking repository management.
-> ### Infrastructure Overview
-> 
-> 
-> * **Server:** Intel Core i3-4005U | 10GB RAM
-> * **OS:** Windows Server with WSL integration
-> * **Stack:** Gitea (Version 1.25.4), MSSQL, IIS Reverse Proxy
-> 
-> 
-> ### Accomplishments
-> 
-> 
-> * Successfully migrated 5+ banking repositories from GitHub to private Gitea organizations.
-> * Solved the "Large File Payload" issue by synchronizing Gitea and IIS request limits to **512MB**.
-> * Developed an automated backup-to-FTP pipeline.
-> 
-> 
+# Gitea DevOps Infrastructure (Windows-Native)
+A production-grade, self-hosted Git environment designed for secure enterprise repository management.
+
+## Infrastructure Overview
+* **Hardware:** Intel Core i3-4005U | 10GB RAM
+* **OS:** Windows Server with WSL2 Integration
+* **Version Control:** Gitea v1.25.4
+* **Database:** Microsoft SQL Server (MSSQL)
+* **Web Gateway:** IIS Reverse Proxy
+
+## Project Modules
+This repository is organized into five core modules. Click the links below for detailed configurations:
+
+1. [**Core Setup**](./01-Core-Setup/database-integration.md): MSSQL integration and Gitea service configuration.
+2. [**IIS Reverse Proxy**](./02-IIS-Reverse-Proxy/iis-optimization.md): Handling 512MB large file payloads and SSL passthrough.
+3. [**CI/CD Runner**](./03-CI-CD-Runner/runner-config.md): Host-mode Gitea Actions for local Windows automation.
+4. [**Automated Backups**](./04-Automated-Backups/backup-logic.md): SQL dumping and automated FTP vaulting strategy.
+5. [**Project Documentation**](./05-Documentation/server-specs.md): Full server lifecycle and maintenance logs.
+
+## Key Accomplishments
+* **Enterprise Migration:** Successfully migrated 5+ high-sensitivity banking repositories (Meezan, Soneri, etc.) from GitHub to private Gitea organizations.
+* **Payload Optimization:** Synchronized IIS and Gitea request limits to support **512MB** uploads, verified with a 100 MiB test file.
+* **Secure Access Control:** Provisioned fine-grained access for team members (e.g., `Ameen.dev`) using Private Organizations to prevent data leakage.
