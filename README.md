@@ -18,6 +18,6 @@ This repository is organized into five core modules. Click the links below for d
 5. [**Project Documentation**](./05-Documentation/README.md): Full server lifecycle and maintenance logs.
 
 ## Key Accomplishments
-* **Enterprise Migration:** Successfully migrated 5+ high-sensitivity banking repositories (Meezan, Soneri, etc.) from GitHub to private Gitea organizations.
+* **Enterprise Migration:** Successfully migrated 5+ high-sensitivity banking repositories from GitHub to private Gitea organizations.
 * **Payload Optimization:** Synchronized IIS and Gitea request limits to support **512MB** uploads, verified with a 100 MiB test file.
 * **Secure Access Control:** Provisioned fine-grained access for team members (e.g., `Ameen.dev`) using Private Organizations to prevent data leakage.
