@@ -20,10 +20,10 @@
 
 # Gitea Infrastructure: Multi-Tenant Organization & Migration Strategy
 
-## 📌 Overview
+##  Overview
 To support enterprise-grade collaboration and data isolation, I migrated the internal Gitea infrastructure from a personal-user model to a **Multi-Tenant Organization** structure. This ensures strict separation between different client sectors (Fintech, Healthcare, etc.).
 
-## 🏗️ The Organizational Structure
+##  The Organizational Structure
 I implemented a structure based on **Organizations** to allow for granular access control and prevent unauthorized cross-project visibility.
 
 | Organization | Purpose | Logic |
@@ -32,7 +32,7 @@ I implemented a structure based on **Organizations** to allow for granular acces
 | **Org-Healthcare** | Medical & Patient Systems | Compliance-focused isolation for healthcare tools. |
 | **Org-Support** | Internal Operations | Management of internal ticketing and support tools. |
 
-## 🚀 Migration & Security Process
+##  Migration & Security Process
 
 ### 1. Ownership Transfer
 Used Gitea’s **Transfer Ownership** feature to migrate existing repositories into their respective Organizations. This preserved all commit history and branching structures while updating the security hierarchy.
@@ -47,7 +47,7 @@ Implemented a "Least Privilege" security model:
 * **Large File Support:** Optimized the reverse proxy (IIS) and Gitea `app.ini` limits to support large database migrations (up to 800MB).
 * **Dedicated Data Repos:** Established a practice of separating source code from database schema snapshots to maintain repository performance.
 
-## ✅ Verification
+##  Verification
 - [x] Verified user-level isolation through cross-account testing.
 - [x] Confirmed high-capacity file uploads through the optimized reverse proxy.
 - [x] Established a 7-day rolling backup retention policy to optimize local storage.
