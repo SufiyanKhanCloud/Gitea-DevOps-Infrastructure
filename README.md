@@ -1,4 +1,4 @@
-# Gitea DevOps Infrastructure (Windows-Native)
+# Gitea DevOps Infrastructure (Windows-Native 2026)
 A production-grade, self-hosted Git environment designed for secure enterprise repository management.
 
 ## Infrastructure Overview
