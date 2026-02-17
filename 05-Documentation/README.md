@@ -54,11 +54,11 @@ Implemented a "Least Privilege" security model:
 
 ### **Gitea-Infrastructure-SSL.md**
 
-# 🚀 Gitea Infrastructure: Subdomain Routing & SSL Orchestration
+#  Gitea Infrastructure: Subdomain Routing & SSL Orchestration
 
 This repository documents the production-grade deployment of a Gitea instance on a Windows Server environment using a **Reverse Proxy** and **Automated SSL Lifecycle Management**.
 
-## 🏗️ 1. Network Architecture
+##  1. Network Architecture
 
 To host Gitea on a professional subdomain without exposing non-standard ports, a **Layer 7 Reverse Proxy** was implemented.
 
@@ -73,7 +73,7 @@ To host Gitea on a professional subdomain without exposing non-standard ports, a
 
 ---
 
-## 🔄 2. IIS Reverse Proxy Configuration
+##  2. IIS Reverse Proxy Configuration
 
 Gitea runs as a background service on a local loopback port. IIS acts as the "Gateway."
 
@@ -87,7 +87,7 @@ An inbound rule was established to bridge external traffic to the internal Go ap
 
 ---
 
-## 🔒 3. SSL/TLS & SNI Implementation
+##  3. SSL/TLS & SNI Implementation
 
 Securing a multi-site environment required advanced **Server Name Indication (SNI)** settings.
 
@@ -105,7 +105,7 @@ Since the server hosts multiple secure sites, **SNI** was enabled on all Port 44
 
 ---
 
-## ⚙️ 4. Application-Level Sync
+##  4. Application-Level Sync
 
 The Gitea configuration was synchronized to recognize its proxied environment.
 
@@ -125,7 +125,7 @@ LOCAL_ROOT_URL = http://127.0.0.1:3005/
 
 ---
 
-## 🛠️ 5. Maintenance & Security Hygiene
+##  5. Maintenance & Security Hygiene
 
 * **Certificate Store:** Expired and conflicting certificates were manually purged from the **Personal** and **Web Hosting** stores (`certlm.msc`) to prevent "Certificate Mismatch" errors.
 * **Hardening:** **HSTS (HTTP Strict Transport Security)** was enabled in IIS to force all browser connections to stay on the encrypted path.
@@ -135,13 +135,9 @@ LOCAL_ROOT_URL = http://127.0.0.1:3005/
 
 ### **Summary of Achievement**
 
-* ✅ Secured Gitea via **HTTPS/TLS 1.2+**.
-* ✅ Implemented **SNI** for multi-tenant certificate hosting.
-* ✅ Automated the 90-day renewal lifecycle.
-* ✅ Decoupled app configuration from infrastructure via **Reverse Proxy**.
+*  Secured Gitea via **HTTPS/TLS 1.2+**.
+*  Implemented **SNI** for multi-tenant certificate hosting.
+*  Automated the 90-day renewal lifecycle.
+*  Decoupled app configuration from infrastructure via **Reverse Proxy**.
 
 ---
-
-**Next Step:** You can now create a new repository on GitHub named `gitea-infrastructure-docs` and paste this content into the `README.md`.
-
-**Would you like me to help you create a "Health Check" script that pings your Gitea API to make sure the site is up?**
