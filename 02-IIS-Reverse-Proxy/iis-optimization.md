@@ -21,7 +21,9 @@
  </security>
  
  ```
- 
+ * **SSL Orchestration:** Automated **Let's Encrypt (R13)** lifecycle management using the ACME protocol.
+* **SNI Implementation:** Enabled **Server Name Indication (SNI)** to support multi-tenant SSL certificates on a single IP address, resolving certificate clashing between subdomains.
+* **Security Hardening:** Implemented **HSTS (HTTP Strict Transport Security)** to enforce a mandatory HTTPS-only policy and prevent protocol downgrade attacks.
  
 
 ---
