@@ -17,7 +17,7 @@ This repository is organized into five core modules. Click the links below for d
 4. [**Automated Backups**](./04-Automated-Backups/backup-strategy.md): SQL dumping and automated FTP vaulting strategy.
 5. [**Project Documentation**](./05-Documentation/README.md): Full server lifecycle and maintenance logs.
 
-## 🌐 Networking & Routing Logic
+##  Networking & Routing Logic
 * **Host Header Routing:** Configured IIS to inspect incoming Host Headers, allowing `git.domain.com` to be isolated from other web services on the same host.
 * **ACME Challenge Pathing:** Crafted a specific URL Rewrite exclusion for `/.well-known/acme-challenge/` to ensure seamless certificate renewals without interfering with the Gitea application proxy.
 * **Zero-Touch Maintenance:** A daily Windows Scheduled Task handles certificate health checks and performs "silent renewals" 30 days prior to expiry.
