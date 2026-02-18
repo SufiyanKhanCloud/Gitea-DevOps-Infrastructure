@@ -27,3 +27,5 @@ This repository is organized into five core modules. Click the links below for d
 * **Enterprise Migration:** Successfully migrated 5+ high-sensitivity banking repositories from GitHub to private Gitea organizations.
 * **Payload Optimization:** Synchronized IIS and Gitea request limits to support **512MB** uploads, verified with a 100 MiB test file.
 * **Secure Access Control:** Provisioned fine-grained access for team members (e.g., `Ameen.dev`) using Private Organizations to prevent data leakage.
+* **SSL Automation:** Achieved 100% automated certificate renewal with persistence on a secondary data drive, ensuring zero manual intervention until May 2026 and beyond.
+* **Multi-Tenant SSL:** Successfully resolved multi-site certificate conflicts by implementing SNI, allowing multiple secure subdomains to coexist on Port 443 with unique certificates.
