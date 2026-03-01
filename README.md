@@ -11,6 +11,9 @@ A production-grade, self-hosted DevOps ecosystem designed for secure, high-avail
 * **Web Gateway:** IIS Layer 7 Reverse Proxy
 * **CI/CD Pipeline:** Gitea Actions (Host Mode)
 
+## Enterprise Architecture 
+<img width="1187" height="411" alt="Screenshot from 2026-02-27 15-11-54" src="https://github.com/user-attachments/assets/ce3d72ab-35f1-43d7-9735-5e82cb25d751" />
+
 ## Project Modules
 
 This repository documents the complete infrastructure lifecycle. Click the modules below for detailed scripts, configurations, and runbooks:
