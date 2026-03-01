@@ -1,115 +1,84 @@
-# Technical Documentation & Architecture
-# Gitea-DevOps-Infrastructure
- 
+# **05 - Enterprise Multi-Tenant Architecture & RBAC**
 
- A production-grade, self-hosted Git infrastructure designed for secure banking repository management.
- ### Infrastructure Overview
- 
- 
- * **Server:** Intel Core i3-4005U | 10GB RAM
- * **OS:** Windows Server with WSL integration
- * **Stack:** Gitea (Version 1.25.4), MSSQL, IIS Reverse Proxy
- 
- 
- ### Accomplishments
- 
- 
- * Successfully migrated 5+ banking repositories from GitHub to private Gitea organizations.
- * Solved the "Large File Payload" issue by synchronizing Gitea and IIS request limits to **512MB**.
- * Developed an automated backup-to-FTP pipeline.
+## **Architectural Overview: Tenant Isolation**
 
-# Gitea Infrastructure: Multi-Tenant Organization & Migration Strategy
+To support enterprise-grade collaboration and ensure strict data compliance, the infrastructure was migrated from a "flat" user-repository model into a strict **Multi-Tenant Organization** hierarchy.
 
-##  Overview
-To support enterprise-grade collaboration and data isolation, I migrated the internal Gitea infrastructure from a personal-user model to a **Multi-Tenant Organization** structure. This ensures strict separation between different client sectors (Fintech, Healthcare, etc.).
+This architecture guarantees cryptographically and logically isolated data silos, ensuring that distinct client sectors (e.g., Financial Services vs. Healthcare) maintain zero cross-project visibility.
 
-##  The Organizational Structure
-I implemented a structure based on **Organizations** to allow for granular access control and prevent unauthorized cross-project visibility.
+## **The Logical Segregation Strategy**
 
-| Organization | Purpose | Logic |
-| :--- | :--- | :--- |
-| **Org-Fintech** | Banking & Financial Systems | Strict isolation for sensitive financial data. |
-| **Org-Healthcare** | Medical & Patient Systems | Compliance-focused isolation for healthcare tools. |
-| **Org-Support** | Internal Operations | Management of internal ticketing and support tools. |
+I implemented dedicated Organizational units to enforce granular access control and prevent unauthorized data leakage.
 
-##  Migration & Security Process
+| Organization Engine | Sector Focus | Architectural Logic & Compliance |
+| --- | --- | --- |
+| **`Org-Fintech`** | Banking & Financial Systems | Strict logical isolation for high-sensitivity financial IP and transaction schemas. |
+| **`Org-Healthcare`** | Medical & Patient Systems | Compliance-focused isolation to protect health-tech integrations. |
+| **`Org-Support`** | Internal Operations | Centralized management for DevOps runbooks, scripts, and internal tooling. |
 
-### 1. Ownership Transfer
-Used Gitea’s **Transfer Ownership** feature to migrate existing repositories into their respective Organizations. This preserved all commit history and branching structures while updating the security hierarchy.
+## **Security Implementation: Role-Based Access Control (RBAC)**
 
-### 2. Role-Based Access Control (RBAC)
-Implemented a "Least Privilege" security model:
-* **Team Isolation:** Created specialized "Developer" teams within each Organization.
-* **Granular Permissions:** Assigned **Write** access for daily operations while restricting **Administrative** rights to a primary/secondary admin for system stability.
-* **Visibility:** Configured settings so users only see projects explicitly assigned to their team.
+Transitioning the repositories required implementing a "Zero-Trust" internal access model utilizing the **Principle of Least Privilege (PoLP)**:
 
-### 3. Infrastructure Optimization
-* **Large File Support:** Optimized the reverse proxy (IIS) and Gitea `app.ini` limits to support large database migrations (up to 800MB).
-* **Dedicated Data Repos:** Established a practice of separating source code from database schema snapshots to maintain repository performance.
+1. **Ownership Migration:** Utilized native Gitea transfer protocols to migrate legacy repositories into the new Organizational silos without fracturing active commit histories or branch protections.
+2. **Team-Level Isolation:** Engineered dedicated "Developer" and "DevOps" teams within each Organization. Users are dynamically assigned visibility only to the specific projects provisioned to their team.
+3. **Granular Permissions:** Deprecated universal "Admin" rights. Daily operational accounts are restricted to **Write** access, while global infrastructure modifications are restricted to a dedicated, vaulted administrative service account.
 
-##  Verification
-- [x] Verified user-level isolation through cross-account testing.
-- [x] Confirmed high-capacity file uploads through the optimized reverse proxy.
-- [x] Established a 7-day rolling backup retention policy to optimize local storage.
+## **Infrastructure Optimization for Data Hygiene**
 
-### **Gitea-Infrastructure-SSL.md**
+To support the massive data loads common in Fintech/Healthcare environments:
 
-#  Gitea Infrastructure: Subdomain Routing & SSL Orchestration
-
-This repository documents the production-grade deployment of a Gitea instance on a Windows Server environment using a **Reverse Proxy** and **Automated SSL Lifecycle Management**.
-
-##  1. Network Architecture
-
-To host Gitea on a professional subdomain without exposing non-standard ports, a **Layer 7 Reverse Proxy** was implemented.
-
-### **Traffic Flow**
-
-`User (HTTPS)` → `IIS (Port 443)` → `URL Rewrite` → `Gitea (Port 3005)`
-
-### **Subdomain Logic**
-
-* **DNS Configuration:** An `A Record` was created for the `git` subdomain, pointing to the server's public IP.
-* **Host Header Routing:** IIS was configured to use **Host Headers**. This allows the server to distinguish between multiple subdomains on a single IP address, routing traffic to the correct internal service based on the incoming URL.
+* **Large File Passthrough:** Synchronized IIS reverse proxy configurations with Gitea's `app.ini` to allow up to **512MB** payload migrations (e.g., massive database schema snapshots).
+* **Repository Decoupling:** Established engineering governance requiring developers to separate source code repositories from database artifact repositories, preventing Git index bloat and maintaining lightning-fast clone speeds.
 
 ---
 
-##  2. IIS Reverse Proxy Configuration
+### **File 2: `06-SSL-Orchestration.md**`
 
-Gitea runs as a background service on a local loopback port. IIS acts as the "Gateway."
+*(This replaces your SSL & Routing documentation)*
 
-### **URL Rewrite Rules**
+# **06 - Subdomain Routing & Automated SSL Orchestration**
 
-An inbound rule was established to bridge external traffic to the internal Go application:
+## **1. Layer 7 Network Architecture**
 
-* **Match:** All incoming requests `(.*)`.
+To host the Gitea environment on a professional enterprise subdomain without exposing non-standard application ports (Port 3005) to the public web, a **Layer 7 Reverse Proxy** was engineered via Microsoft IIS.
+
+**Traffic Flow Topology:**
+`External User (HTTPS :443)` ➔ `IIS Reverse Proxy` ➔ `URL Rewrite Engine` ➔ `Gitea Native Service (HTTP :3005)`
+
+## **2. IIS Reverse Proxy Configuration**
+
+The gateway acts as the sole entry point, handling SSL decryption before passing raw traffic to the internal Go application.
+
+### **Inbound URL Rewrite Logic**
+
+An IIS Inbound Rule bridges the external request to the internal loopback:
+
+* **Match:** `(.*)` (All incoming requests).
 * **Action:** Rewrite to `http://127.0.0.1:3005/{R:1}`.
-* **ACME Exclusion:** A specific condition was added to exclude `/.well-known/acme-challenge/*` from the rewrite. This ensures the SSL Certificate Authority can verify domain ownership without being redirected into the Gitea application.
+* **ACME Challenge Exclusion:** A critical exception rule was engineered for `/.well-known/acme-challenge/*`. This ensures that incoming SSL validation requests from the Certificate Authority are intercepted by the local ACME client and *not* forwarded into the Gitea application proxy, preventing renewal failures.
 
----
+## **3. Cryptographic Security & SNI Implementation**
 
-##  3. SSL/TLS & SNI Implementation
+Securing a multi-tenant Windows Server requires advanced traffic shaping to prevent domain conflicts.
 
-Securing a multi-site environment required advanced **Server Name Indication (SNI)** settings.
+### **Server Name Indication (SNI)**
 
-### **Automated SSL (Let's Encrypt)**
+Because this server hosts multiple secure applications (e.g., HRMS, Git, Documentation) on a single IPv4 address, **SNI** was enforced on all Port 443 bindings.
 
-* **Tool:** `win-acme` (v2.x)
-* **Lifecycle:** Automated via Windows Scheduled Tasks (60-day renewal cycle).
-* **Storage:** The tool and certificates are persisted on a secondary data drive (`D:\`) to ensure portability and survival of system drive wipes.
+* **The Engineering Fix:** SNI allows the IIS Gateway to inspect the incoming `Host Header` and present the correct SSL certificate during the TLS handshake *before* the HTTP request is fully processed. This entirely eliminates "Certificate Mismatch" errors across co-hosted domains.
 
-### **Multi-Certificate Conflict Resolution (SNI)**
+### **Automated SSL Lifecycle (Let's Encrypt)**
 
-Since the server hosts multiple secure sites, **SNI** was enabled on all Port 443 bindings.
+* **Orchestrator:** `win-acme` (v2.x) Let's Encrypt Client.
+* **Automation:** A background Windows Scheduled Task executes a daily health check, performing silent "zero-touch" background renewals 30 days prior to certificate expiration.
+* **Persistence:** All cryptographic tools, private keys, and renewal registries are hosted on a dedicated data volume (`D:\`) to ensure the SSL infrastructure survives a primary OS (Drive `C:\`) failure or wipe.
 
-* **The Solution:** By enabling SNI, the server can present the correct SSL certificate during the TLS handshake *before* the HTTP request is fully processed. This allows the co-existence of Let's Encrypt certificates and other third-party certificates (ZeroSSL, etc.) on the same IP.
+## **4. Application-Level Proxy Synchronization**
 
----
+The internal Gitea configuration was synchronized to seamlessly generate secure external assets (like clone URLs and avatar images) despite operating internally over HTTP.
 
-##  4. Application-Level Sync
-
-The Gitea configuration was synchronized to recognize its proxied environment.
-
-**File:** `app.ini`
+*Path: `custom/conf/app.ini*`
 
 ```ini
 [server]
@@ -120,24 +89,6 @@ LOCAL_ROOT_URL = http://127.0.0.1:3005/
 
 ```
 
-* **Protocol:** Set to `http` for internal communication.
-* **Root URL:** Set to `https` to ensure the UI generates secure links for Git clones and assets.
+## **5. Protocol Hardening**
 
----
-
-##  5. Maintenance & Security Hygiene
-
-* **Certificate Store:** Expired and conflicting certificates were manually purged from the **Personal** and **Web Hosting** stores (`certlm.msc`) to prevent "Certificate Mismatch" errors.
-* **Hardening:** **HSTS (HTTP Strict Transport Security)** was enabled in IIS to force all browser connections to stay on the encrypted path.
-* **Renewal:** A daily cron-style task checks for certificate health and performs silent renewals 30 days before expiration.
-
----
-
-### **Summary of Achievement**
-
-*  Secured Gitea via **HTTPS/TLS 1.2+**.
-*  Implemented **SNI** for multi-tenant certificate hosting.
-*  Automated the 90-day renewal lifecycle.
-*  Decoupled app configuration from infrastructure via **Reverse Proxy**.
-
----
+* **HSTS Enforced:** **HTTP Strict Transport Security (HSTS)** was enabled at the IIS Gateway level. This forces all modern web browsers to interact with the repository strictly over encrypted HTTPS pipelines, completely neutralizing protocol downgrade attacks and MITM (Man-in-the-Middle) vulnerabilities.
